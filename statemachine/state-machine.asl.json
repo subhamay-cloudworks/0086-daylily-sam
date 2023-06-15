@@ -1,0 +1,25 @@
+{
+    "Comment": "An example of the Task Timer (Lambda, Amazon SNS) Step Function",
+    "TimeoutSeconds": 3600,
+    "StartAt": "Wait for Timestamp",
+    "States": {
+      "Wait for Timestamp": {
+        "Type": "Wait",
+        "Next": "Send SNS Message",
+        "InputPath": "$",
+        "SecondsPath": "$.waitSeconds",
+        "OutputPath": "$.Message"
+      },
+      "Send SNS Message": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "Message": {
+            "Message.$": "$"
+          },
+          "TopicArn": "${SNSTopicArn}"
+        },
+        "End": true
+      }
+    }
+  }
